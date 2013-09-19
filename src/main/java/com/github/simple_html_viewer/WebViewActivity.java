@@ -134,6 +134,7 @@ public class WebViewActivity extends Activity {
             }
         } else {
             switch (keyCode) {
+                // disables a default scroll behaviour with the unnecessary animation
                 case KeyEvent.KEYCODE_DPAD_RIGHT:
                 case KeyEvent.KEYCODE_DPAD_LEFT:
                 case KeyEvent.KEYCODE_DPAD_DOWN:
