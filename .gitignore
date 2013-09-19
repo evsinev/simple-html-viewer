@@ -1,6 +1,17 @@
-*.class
-
-# Package Files #
-*.jar
-*.war
-*.ear
+android/bin
+android/gen
+classes
+android/gen-external-apklibs
+.settings
+*.iml
+android/project.properties
+tests-test/bin
+tests-test/*.iml
+/android/.classpath
+/android/.project
+.classpath
+.project
+target
+.idea
+*~
+gen-external-apklibs
