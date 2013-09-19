@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 /**
  *
  */
+@SuppressWarnings("UnusedDeclaration")
 public class EpdHelper {
 
     public static final int EPD_A2 = 2;
@@ -26,7 +27,6 @@ public class EpdHelper {
             LOG.debug("request epd method = %s", requestEpdModeMethod.toString());
         } catch (NoSuchMethodException e) {
             LOG.error("Method requestEpdMode(int) not found", e);
-            e.printStackTrace();
             requestEpdModeMethod = null;
         }
         theRequestEpdModeMethod = requestEpdModeMethod;
@@ -40,7 +40,7 @@ public class EpdHelper {
         try {
             return (Boolean)theRequestEpdModeMethod.invoke(aView, aMode);
         } catch (Exception e) {
-            LOG.error("Can't invoke method: "+theRequestEpdModeMethod, e);
+            LOG.error("Can't invoke method: " + theRequestEpdModeMethod, e);
             return false;
         }
     }

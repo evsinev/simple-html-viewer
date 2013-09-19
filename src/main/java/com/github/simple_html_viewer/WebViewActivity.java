@@ -6,10 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Window;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import java.lang.reflect.Field;
 
@@ -40,41 +38,33 @@ public class WebViewActivity extends Activity {
 
         setTextZoom(theWebView, theCurrentTextZoom);
 
-
-        theWebView.setWebChromeClient(new WebChromeClient() {
-
-        });
-
-        theWebView.setWebViewClient(new WebViewClient() {
-
-        });
-
     }
 
 
     private static void setTextZoom(WebView aView, int aTextZoom) {
+        // android 2.x allows changing a text zoom by predefined values: 50, 75, 100, 150, 200
+        // this hack provides an ability to use custom values
 
         WebSettings settings = aView.getSettings();
 
+        // using LARGEST or LARGER enums just to emulate the textSize changing
         WebSettings.TextSize size = settings.getTextSize() == WebSettings.TextSize.LARGEST ? WebSettings.TextSize.LARGER : WebSettings.TextSize.LARGEST;
 
         try {
+            // changes enum value
             Field valueField = size.getClass().getDeclaredField("value");
             valueField.setAccessible(true);
-
-
             valueField.setInt(size, aTextZoom);
 
             int value = valueField.getInt(size);
+            LOG.debug("new text size: %d", value);
+
             settings.setTextSize(size);
+
         } catch (Exception e) {
             LOG.error("Can't change text size", e);
         }
     }
-
-
-    int theScrollY = 0;
-    int theScrollX = 0;
 
     @Override
     protected void onStart() {
@@ -98,7 +88,6 @@ public class WebViewActivity extends Activity {
         LOG.debug("code: %d, event: %s", keyCode, event.toString());
         int scrollOffset = theWebView.getHeight() - 50;
 
-
         if(event.getAction()==KeyEvent.ACTION_UP) {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_VOLUME_UP:
@@ -114,10 +103,7 @@ public class WebViewActivity extends Activity {
                     return true;
 
                 case KeyEvent.KEYCODE_MENU:
-                    LOG.debug("Zooming...");
-                    // theWebView.zoomIn();
-//                    increaseTextSize();
-//                    LOG.debug("Zooming DONE");
+                    LOG.debug("Menu key");
                     return true;
 
                 case KeyEvent.KEYCODE_NUMPAD_7:
@@ -159,12 +145,9 @@ public class WebViewActivity extends Activity {
         return super.dispatchKeyEvent(event);
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return super.onKeyDown(keyCode, event);
-    }
-
     private final EpdHelper theEpdHelper = new EpdHelper();
     private WebView theWebView;
     int theCurrentTextZoom = 120;
+    int theScrollY = 0;
+    int theScrollX = 0;
 }
